@@ -17,7 +17,7 @@ public class Listener {
 	@Autowired
 	SwitchRepository swrepo;
 
-	@JmsListener(destination = "cm.create")
+	@JmsListener(destination = "cm.create", selector = "JMSCorrelationID = 'createc'")
 	public void create_switch(Message objMessage) {
 		if (objMessage instanceof ObjectMessage) {
 			try {
@@ -39,10 +39,12 @@ public class Listener {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
+		} else {
+			System.out.println("Not a object message!");
 		}
 	}
 
-	@JmsListener(destination = "cm.update")
+	@JmsListener(destination = "cm.update", selector = "JMSCorrelationID = 'updatec'")
 	private void updateSwitch(Message objMessage) {
 		if (objMessage instanceof ObjectMessage) {
 			try {
@@ -87,10 +89,12 @@ public class Listener {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
+		} else {
+			System.out.println("Not a object message!");
 		}
 	}
 
-	@JmsListener(destination = "cm.delete")
+	@JmsListener(destination = "cm.delete", selector = "JMSCorrelationID = 'deletec'")
 	private void deleteSwitch(Message objMessage) {
 		if (objMessage instanceof ObjectMessage) {
 			try {
@@ -104,6 +108,8 @@ public class Listener {
 						if (sw != null) {
 							System.out.println("Delete " + sw.toString());
 							swrepo.delete(sw);
+						} else {
+							System.out.println("This switch doesn't exist!");
 						}
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
@@ -112,6 +118,8 @@ public class Listener {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
+		} else {
+			System.out.println("Not a object message!");
 		}
 	}
 

@@ -4,7 +4,7 @@ package web.configs;
 import java.util.Arrays;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.camel.component.jms.JmsComponent;
+import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -31,11 +31,23 @@ public class JMSConfig {
 		return connectionFactory;
 	}
 	
+//	@Bean
+//	public JmsComponent jmsComponent() {		
+//		JmsComponent jmsComponent = new JmsComponent();
+//		jmsComponent.setConnectionFactory(connectionFactory());
+//		jmsComponent.setExplicitQosEnabled(true);
+//		jmsComponent.setTimeToLive(3*60*60*1000); 
+//		return jmsComponent;
+//	}
+	
 	@Bean
-	public JmsComponent jmsComponent() {		
-		JmsComponent jmsComponent = new JmsComponent();
-		jmsComponent.setConnectionFactory(connectionFactory());
-		return jmsComponent;
+	public ActiveMQComponent activeMQComponent() {
+		ActiveMQComponent activeMQComponent = new ActiveMQComponent();
+		activeMQComponent.setConnectionFactory(connectionFactory());
+		activeMQComponent.setDeliveryPersistent(true);
+		activeMQComponent.setExplicitQosEnabled(true);
+		activeMQComponent.setTimeToLive(3*60*60*1000);
+		return activeMQComponent;
 	}
 	
 	@Bean
